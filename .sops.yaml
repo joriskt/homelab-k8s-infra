@@ -1,0 +1,7 @@
+creation_rules:
+  # Keys: joris.asc Encryption subkey, cicd.asc Encryption subkey.
+  - pgp: >-
+      C0B224C0F27D4BD397DB7AD23922F0D6B3B19F29!,
+      A07340A6AC042B09AAA7F402423FDFC1C6403F99!
+    path_regex: '.*(\.ya?ml|talosconfig)$'
+    encrypted_comment_regex: '\s*(enc|encrypt|secret)$'

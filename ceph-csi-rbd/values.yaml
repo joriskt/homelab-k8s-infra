@@ -1,0 +1,48 @@
+---
+
+serviceAccounts:
+  nodeplugin:
+    name: ceph-csi-rbd-node
+  provisioner:
+    name: ceph-csi-rbd-provisioner
+
+csiConfig:
+  # Cluster ID obtained from Ceph via the command line.
+  - clusterID: "c1b5410e-f4c7-458a-ba23-678dd8109b50"
+    monitors:
+      - "192.168.3.23"
+      - "192.168.3.24"
+      - "192.168.3.25"
+
+nodeplugin:
+
+  # Disable metrics since we're not going to be using them any time soon
+  httpMetrics:
+    enabled: false
+    service:
+      enabled: false
+
+provisioner:
+  # Use host networking since the Ceph cluster is external to the cluster.
+  # All nodes have a direct connection to the storage network 192.168.3.0/24.
+  enableHostNetwork: true
+
+  # Disable metrics since we're not going to be using them any time soon
+  httpMetrics:
+    enabled: false
+    service:
+      enabled: false
+
+storageClass:
+  create: true
+  name: ceph-rbd
+
+  clusterID: "c1b5410e-f4c7-458a-ba23-678dd8109b50" # Same as earlier
+  pool: k8s-staging # Name of the pool inside the Ceph UI in proxmox
+  encrypted: "false"
+
+  provisionerSecretNamespace: "ceph-csi-rbd"
+  controllerExpandSecret: csi-rbd-provisioner-secret
+  controllerExpandSecretNamespace: "ceph-csi-rbd"
+  nodeStageSecret: csi-rbd-node-secret
+  nodeStageSecretNamespace: "ceph-csi-rbd"

@@ -1,0 +1,2 @@
+# Ignore the upstream ceph-csi repo that may exist in this workspace
+ceph-csi
