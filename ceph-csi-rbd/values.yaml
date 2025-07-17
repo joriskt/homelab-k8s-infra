@@ -35,14 +35,12 @@ provisioner:
 
 storageClass:
   create: true
-  name: ceph-rbd
+  name: ceph-csi-rbd
 
   clusterID: "c1b5410e-f4c7-458a-ba23-678dd8109b50" # Same as earlier
-  pool: k8s-staging # Name of the pool inside the Ceph UI in proxmox
+  pool: "k8s-staging" # Name of the pool inside the Ceph UI in proxmox
   encrypted: "false"
 
   provisionerSecretNamespace: "ceph-csi-rbd"
-  controllerExpandSecret: csi-rbd-provisioner-secret
   controllerExpandSecretNamespace: "ceph-csi-rbd"
-  nodeStageSecret: csi-rbd-node-secret
   nodeStageSecretNamespace: "ceph-csi-rbd"

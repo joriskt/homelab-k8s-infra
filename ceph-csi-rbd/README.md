@@ -7,22 +7,15 @@
 
 ### Proxmox kant
 - Maak een ceph pool `k8s-staging` via de Ceph UI
-- Maak Ceph accounts:
+- Maak Ceph account:
 ```bash
-# node is zonder mgr permission
-ceph auth get-or-create \
-    client.csi-rbd-k8s-staging-node \
-    mon 'profile rbd' \
-    osd 'profile rbd pool=k8s-staging' \
-    -o csi-rbd-k8s-staging-node.keyring
 
-# provisioner is met mgr permission
 ceph auth get-or-create \
-    client.csi-rbd-k8s-staging-provisioner \
+    client.csi-rbd-k8s-staging \
     mon 'profile rbd' \
     mgr 'profile rbd pool=k8s-staging' \
     osd 'profile rbd pool=k8s-staging' \
-    -o csi-rbd-k8s-staging-provisioner.keyring
+    -o csi-rbd-k8s-staging.keyring
 ```
 
 ### Kubernetes kant
@@ -31,14 +24,12 @@ ceph auth get-or-create \
 
 - Sta toe dat we privileged pods gaan krijgen in deze namespace (nodig voor Talos): `k label namespace ceph-csi-rbd pod-security.kubernetes.io/enforce=privileged`
 
-- Importeer de secrets (keyring base64 van de accounts)
+- Importeer de secrets (keyring base64 van de account)
 ```
-k create secret generic csi-rbd-provisioner-secret \
-    --from-literal=userID=csi-rbd-k8s-staging-provisioner \
-    --from-literal=userKey=$(cat csi-rbd-k8s-staging-provisioner.keyring)$ \
+k create secret generic ceph-csi-rbd \
+    --from-literal=userID=csi-rbd-k8s-staging \
+    --from-literal=userKey=$(cat csi-rbd-k8s-staging.keyring)$ \
     --namespace=ceph-csi-rbd
-
-# idem voor csi-rbd-node-secret
 ```
 
 - Voeg de Helm repository toe als je dat nog niet gedaan hebt:
@@ -68,12 +59,12 @@ Om te testen of RBD werkt:
 cd test
 
 # Deploy test app
-k apply -f test.yaml
+k apply -f test-rbd.yaml
 
 # Check of de pod kon schrijven en lezen naar RBD
 $ k logs pod/rbd-app
 Ceph RBD is working!
 
 # Opruimen
-$ k delete -f test.yaml
+$ k delete -f test-rbd.yaml
 ```

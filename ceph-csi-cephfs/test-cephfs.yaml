@@ -1,29 +1,29 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: rbd-pvc-test
+  name: cephfs-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1Gi
-  storageClassName: ceph-rbd
+  storageClassName: ceph-csi-cephfs
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: rbd-app
+  name: cephfs-app
 spec:
   containers:
     - name: app
       image: busybox
       command: ["/bin/sh"]
-      args: ["-c", "echo 'Ceph RBD is working!' > /mnt/test/data.txt && cat /mnt/test/data.txt && sleep 3600"]
+      args: ["-c", "echo 'CephFS is working!' > /mnt/test/data.txt && cat /mnt/test/data.txt && sleep 3600"]
       volumeMounts:
         - mountPath: "/mnt/test"
-          name: rbd-vol 
+          name: cephfs-vol 
   volumes:
-    - name: rbd-vol
+    - name: cephfs-vol
       persistentVolumeClaim:
-        claimName: rbd-pvc-test
+        claimName: cephfs-pvc
