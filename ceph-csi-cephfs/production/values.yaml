@@ -1,0 +1,46 @@
+
+
+serviceAccounts:
+  nodeplugin:
+    name: ceph-csi-cephfs-node
+  provisioner:
+    name: ceph-csi-cephfs-provisioner
+
+csiConfig:
+  # Cluster ID obtained from Ceph via the command line.
+  - clusterID: "c1b5410e-f4c7-458a-ba23-678dd8109b50"
+    monitors:
+      - "192.168.3.23"
+      - "192.168.3.24"
+      - "192.168.3.25"
+
+nodeplugin:
+  httpMetrics:
+    enabled: false
+    service:
+      enabled: false
+
+provisioner:
+  enableHostNetwork: true
+
+  httpMetrics:
+    enabled: false
+    service:
+      enabled: false
+
+storageClass:
+  create: true
+  name: ceph-csi-cephfs
+  
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+  
+  clusterID: "c1b5410e-f4c7-458a-ba23-678dd8109b50"
+  fsName: "k8s-production"
+  pool: "k8s-production_data"
+
+  # encrypted: "false"
+
+  provisionerSecretNamespace: "ceph-csi-cephfs"
+  controllerExpandSecretNamespace: "ceph-csi-cephfs"
+  nodeStageSecretNamespace: "ceph-csi-cephfs"
