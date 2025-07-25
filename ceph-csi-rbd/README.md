@@ -56,8 +56,6 @@ $ helm install \
 Om te testen of RBD werkt:
 
 ```bash
-cd test
-
 # Deploy test app
 k apply -f test-rbd.yaml
 
