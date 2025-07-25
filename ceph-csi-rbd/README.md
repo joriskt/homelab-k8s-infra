@@ -26,7 +26,7 @@ ceph auth get-or-create \
 
 - Importeer de secrets (keyring base64 van de account)
 ```
-k create secret generic ceph-csi-rbd \
+k create secret generic csi-rbd-secret \
     --from-literal=userID=csi-rbd-k8s-staging \
     --from-literal=userKey=$(cat csi-rbd-k8s-staging.keyring)$ \
     --namespace=ceph-csi-rbd
@@ -48,7 +48,7 @@ $ helm install \
     --namespace ceph-csi-rbd \
     -f values.yaml \
     ceph-csi-rbd \ # Naam vd deployment
-    ceph-csi/ceph-cs-rbd # De chart
+    ceph-csi/ceph-csi-rbd # De chart
 ```
 
 ## Testen
