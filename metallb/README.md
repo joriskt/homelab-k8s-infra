@@ -6,6 +6,11 @@ On a small cluster where all nodes are control-plane nodes, make sure they **do 
 Relevant documentation for fixing the above is in my Talos repository.
 
 
+## Voorwaarden
+
+- Het netwerk waarop de nodes verbonden zijn is een vrije range van IP-adressen nodig, **buiten** de DHCP range.
+
+
 ## Gebruik
 
 Het primaire doel van MetalLB in mijn cluster is om de `ingress-nginx` een IP-adres toe te kennen, ook als individuele nodes down gaan.
